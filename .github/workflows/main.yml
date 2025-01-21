@@ -20,8 +20,8 @@ jobs:
 
       - name: Checkout with Submodules
         uses: actions/checkout@v4
-        with:
-          submodules: recursive # Ensure submodules are initialized and updated recursively
+        # with:
+        #   submodules: recursive # Ensure submodules are initialized and updated recursively
 
       - name: Setup Cog
         uses: replicate/setup-cog@v2
