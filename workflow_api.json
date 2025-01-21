@@ -1,0 +1,235 @@
+{
+    "1": {
+      "inputs": {
+        "ckpt_name": "dreamshaperXL_lightningDPMSDE.safetensors"
+      },
+      "class_type": "CheckpointLoaderSimple"
+    },
+    "2": {
+      "inputs": {
+        "ip_weight": 0.8,
+        "cn_strength": 0.8,
+        "start_at": 0,
+        "end_at": 1,
+        "noise": 0,
+        "combine_embeds": "average",
+        "instantid": [
+          "3",
+          0
+        ],
+        "insightface": [
+          "4",
+          0
+        ],
+        "control_net": [
+          "14",
+          0
+        ],
+        "image": [
+          "45",
+          0
+        ],
+        "model": [
+          "5",
+          0
+        ],
+        "positive": [
+          "6",
+          0
+        ],
+        "negative": [
+          "7",
+          0
+        ]
+      },
+      "class_type": "ApplyInstantIDAdvanced"
+    },
+    "3": {
+      "inputs": {
+        "instantid_file": "instantid-ip-adapter.bin"
+      },
+      "class_type": "InstantIDModelLoader"
+    },
+    "4": {
+      "inputs": {
+        "provider": "CUDA"
+      },
+      "class_type": "InstantIDFaceAnalysis"
+    },
+    "5": {
+      "inputs": {
+        "weight": 0.3,
+        "weight_type": "style transfer",
+        "combine_embeds": "average",
+        "start_at": 0,
+        "end_at": 1,
+        "embeds_scaling": "V only",
+        "model": [
+          "9",
+          0
+        ],
+        "ipadapter": [
+          "9",
+          1
+        ],
+        "image": [
+          "10",
+          0
+        ]
+      },
+      "class_type": "IPAdapterAdvanced"
+    },
+    "6": {
+      "inputs": {
+        "text": "{{prompt}}",
+        "clip": [
+          "1",
+          1
+        ]
+      },
+      "class_type": "CLIPTextEncode"
+    },
+    "7": {
+      "inputs": {
+        "text": "{{negative}}",
+        "clip": [
+          "1",
+          1
+        ]
+      },
+      "class_type": "CLIPTextEncode"
+    },
+    "8": {
+      "inputs": {
+        "seed": 316638634472499,
+        "steps": 9,
+        "cfg": 1.2,
+        "sampler_name": "dpmpp_2m_sde",
+        "scheduler": "karras",
+        "denoise": 0.97,
+        "model": [
+          "2",
+          0
+        ],
+        "positive": [
+          "2",
+          1
+        ],
+        "negative": [
+          "2",
+          2
+        ],
+        "latent_image": [
+          "11",
+          0
+        ]
+      },
+      "class_type": "KSampler"
+    },
+    "9": {
+      "inputs": {
+        "preset": "STANDARD (medium strength)",
+        "model": [
+          "1",
+          0
+        ]
+      },
+      "class_type": "IPAdapterUnifiedLoader"
+    },
+    "10": {
+      "inputs": {
+        "image": "{{image}}",
+        "upload": "image"
+      },
+      "class_type": "LoadImage"
+    },
+    "11": {
+      "inputs": {
+        "width": 1024,
+        "height": 1024,
+        "batch_size": 1
+      },
+      "class_type": "EmptyLatentImage"
+    },
+    "12": {
+      "inputs": {
+        "samples": [
+          "8",
+          0
+        ],
+        "vae": [
+          "1",
+          2
+        ]
+      },
+      "class_type": "VAEDecode"
+    },
+    "13": {
+      "inputs": {
+        "images": [
+          "12",
+          0
+        ]
+      },
+      "class_type": "PreviewImage"
+    },
+    "14": {
+      "inputs": {
+        "control_net_name": "instantid-controlnet.safetensors"
+      },
+      "class_type": "ControlNetLoader"
+    },
+    "45": {
+      "inputs": {
+        "width": 1024,
+        "height": 1024,
+        "interpolation": "nearest",
+        "method": "pad",
+        "condition": "always",
+        "multiple_of": 0,
+        "image": [
+          "50",
+          0
+        ]
+      },
+      "class_type": "ImageResize+"
+    },
+    "46": {
+      "inputs": {
+        "images": [
+          "45",
+          0
+        ]
+      },
+      "class_type": "PreviewImage"
+    },
+    "48": {
+      "inputs": {
+        "model_name": "4x-UltraSharp.pth"
+      },
+      "class_type": "UpscaleModelLoader"
+    },
+    "50": {
+      "inputs": {
+        "upscale_model": [
+          "48",
+          0
+        ],
+        "image": [
+          "10",
+          0
+        ]
+      },
+      "class_type": "ImageUpscaleWithModel"
+    },
+    "51": {
+      "inputs": {
+        "filename_prefix": "ComfyUI",
+        "images": [
+          "12",
+          0
+        ]
+      },
+      "class_type": "SaveImage"
+    }
+  }
