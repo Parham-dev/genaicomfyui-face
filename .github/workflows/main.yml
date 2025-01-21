@@ -21,7 +21,26 @@ jobs:
       - name: Checkout with Submodules
         uses: actions/checkout@v4
         with:
-          submodules: recursive # Ensure submodules are initialized and updated recursively
+          submodules: recursive # Ensure submodules are initialized and updated
+
+      - name: Run Repository Cloning Script
+        run: python3 scripts/install_custom_nodes.py
+
+      - name: Validate custom_nodes Directory
+        run: |
+          custom_nodes_dir="ComfyUI/custom_nodes"
+          if [ -d "$custom_nodes_dir" ]; then
+            folder_count=$(find "$custom_nodes_dir" -mindepth 1 -maxdepth 1 -type d | wc -l)
+            if [ "$folder_count" -le 3 ]; then
+              echo "Error: Less than or equal to 3 folders found in $custom_nodes_dir."
+              exit 1
+            else
+              echo "Validation passed: $folder_count folders found in $custom_nodes_dir."
+            fi
+          else
+            echo "Error: Directory $custom_nodes_dir does not exist."
+            exit 1
+          fi
 
       - name: Setup Cog
         uses: replicate/setup-cog@v2
